@@ -22,7 +22,18 @@ Speech to Text handling
     exports.startup = function() {
         // global variable declarations
         var selectedText = "";
+        
+        // handle arbitrarily large blocks of text, which can cause the API
+        // to fail.
+        function handle_long_datum(input) {
+	        var shortened_text = input.innerHTML.split(' ');
+                for (var i = 0; i < shortened_text.length; i++) {
+    	            var msg = new SpeechSynthesisUtterance(shortened_text[i]);
+		            window.speechSynthesis.speak(msg);
+                }
+        }
 
+        
         // listen for Alt+Shift+L
         document.addEventListener('keyup', function(e) {
             if ((e.altKey) && (e.shiftKey) && (e.which == 76)) {
@@ -39,7 +50,13 @@ Speech to Text handling
                     selectedText = document.selection.createRange().text;
                 }
 
-                text_to_speech(selectedText);
+                // determine whether text needs to be split into manageable text blocks
+                // or not. 1428 is the charcount that the API breaks at.
+                if (selectedText.length >= 1428) {
+                    handle_long_datum(selectedText);
+                } else {
+                    text_to_speech(selectedText);
+                }
 
             }
         });
