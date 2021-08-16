@@ -23,9 +23,9 @@ Speech to Text handling
         // global variable declarations
         var selectedText = "";
 
-        // listen for Alt+Shift+e
+        // listen for Alt+Shift+L
         document.addEventListener('keyup', function(e) {
-            if ((e.altKey) && (e.shiftKey) && (e.which == 69)) {
+            if ((e.altKey) && (e.shiftKey) && (e.which == 76)) {
                 // get current highlighted portion
                 if (window.getSelection) {
                     selectedText = window.getSelection();
